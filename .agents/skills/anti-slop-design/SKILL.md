@@ -1,6 +1,7 @@
 ---
 name: anti-slop-design
-description: Gunakan saat membangun UI frontend (komponen, landing page, dashboard) yang khas dan siap production. Hindari tampilan generik buatan AI seperti gradien ungu, rounded seragam, font Inter.
+description: >
+   Gunakan saat membangun UI frontend (komponen, landing page, dashboard) yang khas dan siap production. Hindari tampilan generik buatan AI: gradien ungu, rounded seragam, font Inter.
 metadata:
   author: niamkvn
   version: "1.1.0"

@@ -1,6 +1,7 @@
 ---
 name: micro-interaction-spec
-description: Gunakan saat menyerahkan satu micro-interaction ke engineering, seperti trigger, rules, feedback, loops, dan modes. Untuk motion saja pakai `animation-principles`; untuk komponen multi-state pakai `state-machine`.
+description: >
+  Gunakan saat menyerahkan satu micro-interaction ke engineering: trigger, rules, feedback, loops, dan modes. Untuk motion saja pakai `animation-principles`; untuk komponen multi-state pakai `state-machine`.
 metadata:
   author: niamkvn
   version: "1.0.0"
