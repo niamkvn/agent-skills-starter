@@ -4,7 +4,7 @@ description: >
    Gunakan saat membangun UI frontend (komponen, landing page, dashboard) yang khas dan siap production. Hindari tampilan generik buatan AI: gradien ungu, rounded seragam, font Inter.
 metadata:
   author: niamkvn
-  version: "1.1.0"
+  version: "1.0.0"
 ---
 
 # Anti Slop Design
