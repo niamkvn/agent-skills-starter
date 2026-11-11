@@ -25,7 +25,7 @@ Cegah desain frontend yang terkesan "buatan AI".
    - Tone (pilih satu, tegas): brutalism, minimal, maksimalis, retrofuturism, organik, mewah, playful, editorial, art deco, industrial, pastel lembut, neon 80-an, minimalis Jepang
    - Pembeda: satu elemen yang akan diingat pengguna
    - Batasan teknis: framework, performa, aksesibilitas
-2. **Bangun** (kode siap production: HTML/CSS/JS, Svelte, dll.)
+2. **Bangun** (kode siap production: HTML/CSS/JS, Svelte, Vue, React, dll.)
    - Tipografi: font berkarakter (Google Fonts), pasangkan display + body
    - Warna: variabel CSS; satu warna dominan + aksen tegas; palet tidak umum
    - Motion: staggered reveal saat load; hover/scroll tak terduga; CSS untuk HTML, Motion library untuk Svelte
