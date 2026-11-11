@@ -1,6 +1,7 @@
 ---
 name: ponytail-review
-description: Review kualitas seluruh repo: bug, celah keamanan, titik rusak di bawah beban nyata, kode berisiko tanpa test, jalur lambat, dan apa yang perlu dihapus, digabung, atau dipecah. Laporan satu kali, berurutan, tanpa mengubah kode. Gunakan untuk "review codebase", "review repo", "cari bloat", "apa yang bisa dihapus", /ponytail-review.
+description: >
+   Review kualitas seluruh repo: bug, celah keamanan, titik rusak di bawah beban nyata, kode berisiko tanpa test, jalur lambat, dan apa yang perlu dihapus, digabung, atau dipecah. Laporan satu kali, berurutan, tanpa mengubah kode. Gunakan untuk "review codebase", "review repo", "cari bloat", "apa yang bisa dihapus", /ponytail-review.
 metadata:
   author: niamkvn
   version: "1.0.0"
