@@ -1,35 +1,47 @@
 ---
 name: anti-slop-design
 description: >
-   Gunakan saat membangun UI frontend (komponen, landing page, dashboard) yang khas dan siap production. Hindari tampilan generik buatan AI: gradien ungu, rounded seragam, font Inter.
+   Prevents generic, "AI-made" frontend design. Use when building or restyling
+   UI to get a distinctive look with deliberate typography, color, motion, and layout.
 metadata:
   author: niamkvn
-  version: "1.0.0"
+  version: 1.0.0
 ---
 
 # Anti Slop Design
-Cegah desain frontend yang terkesan "buatan AI".
 
-## Ciri AI Slop (dilarang)
-- Font default: Inter/Roboto/Arial/sistem, juga Space Grotesk
-- Gradien ungu di latar putih
-- Rounded corners seragam
-- Layout rata tengah saja
-- Hero section + 3 kolom fitur yang klise
-- Bayangan identik di semua kartu
-- Ilustrasi tanpa karakter
+Prevent frontend design that feels "AI-made".
 
-## Alur
-1. **Konsep**
-   - Tujuan dan pengguna: masalah apa yang diselesaikan, untuk siapa?
-   - Tone (pilih satu, tegas): brutalism, minimal, maksimalis, retrofuturism, organik, mewah, playful, editorial, art deco, industrial, pastel lembut, neon 80-an, minimalis Jepang
-   - Pembeda: satu elemen yang akan diingat pengguna
-   - Batasan teknis: framework, performa, aksesibilitas
-2. **Bangun** (kode siap production: HTML/CSS/JS, Svelte, Vue, React, dll.)
-   - Tipografi: font berkarakter (Google Fonts), pasangkan display + body
-   - Warna: variabel CSS; satu warna dominan + aksen tegas; palet tidak umum
-   - Motion: staggered reveal saat load; hover/scroll tak terduga; CSS untuk HTML, Motion library untuk Svelte
-   - Ruang: asimetris, tumpang tindih, alur diagonal, elemen keluar grid; whitespace lega atau padat secara disengaja
-   - Latar: jangan solid default; gradient mesh, noise, pola geometris, transparansi berlapis, bayangan dramatis, border dekoratif
-   - Kompleksitas kode sesuai visi: maksimalis butuh kode rumit, minimalis butuh presisi spasi dan tipografi
-3. **Verifikasi**: hierarki visual, interaksi, animasi, aksesibilitas; ada elemen asimetris; tidak ada ciri AI Slop
+## AI Slop Signs (forbidden)
+
+- Default fonts: Inter/Roboto/Arial/system fonts, also Space Grotesk
+- Purple gradients on a white background
+- Uniform rounded corners
+- Center-aligned layouts only
+- Clichéd hero section + 3-column feature grid
+- Identical shadows on every card
+- Illustrations with no character
+
+## Workflow
+
+### 1. Concept
+
+- Purpose and users: what problem is being solved, and for whom?
+- Tone (pick one, commit to it): brutalism, minimal, maximalist, retrofuturism, organic, luxury, playful, editorial, art deco, industrial, soft pastel, 80s neon, Japanese minimalism
+- Differentiator: one element the user will remember
+- Technical constraints: framework, performance, accessibility
+
+### 2. Build
+
+Production-ready code: HTML/CSS/JS, Svelte, Vue, React, etc.
+
+- **Typography:** characterful fonts (Google Fonts); pair a display font with a body font
+- **Color:** CSS variables; one dominant color + a sharp accent; an uncommon palette
+- **Motion:** staggered reveal on load; unexpected hover/scroll effects; CSS for HTML, Motion library for Svelte
+- **Space:** asymmetry, overlap, diagonal flow, elements breaking out of the grid; whitespace that is either generous or dense, by intention
+- **Background:** never a default solid color; use gradient mesh, noise, geometric patterns, layered transparency, dramatic shadows, decorative borders
+- **Code complexity:** match the vision; maximalism needs elaborate code, minimalism needs precise spacing and typography
+
+### 3. Verify
+
+Check visual hierarchy, interactions, animations, and accessibility. Make sure there are asymmetric elements and no AI Slop signs remain.

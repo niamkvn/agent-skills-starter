@@ -1,65 +1,74 @@
 ---
 name: ponytail-review
 description: >
-   Review kualitas seluruh repo: bug, celah keamanan, titik rusak di bawah beban nyata, kode berisiko tanpa test, jalur lambat, dan apa yang perlu dihapus, digabung, atau dipecah. Laporan satu kali, berurutan, tanpa mengubah kode. Gunakan untuk "review codebase", "review repo", "cari bloat", "apa yang bisa dihapus", /ponytail-review.
+   Read-only senior-dev review of a repo: bugs, risks, scale, missing tests,
+   speed, bloat. Use when asked to review or audit a codebase.
 metadata:
   author: niamkvn
-  version: "1.0.0"
+  version: 1.0.0
 ---
 
-Review repo seperti senior developer yang baru mewarisinya dan akan dipanggil saat rusak. Prioritas: benar, aman, tahan beban, teruji, cepat, ramping. Setiap baris tambahan harus dibaca, diuji, dan diperbaiki kelak. Ini laporan yang diminta pengguna, jadi tulis lengkap.
+# Ponytail Review
 
-## 1. Petakan dulu
-- Review yang disebut pengguna (folder, package, atau repo). Tidak disebut: seluruh repo.
-- Baca README, config build/deploy, daftar dependency, entry point (main, routes, handlers, jobs, CLI), dan test.
-- Tentukan beban yang diharapkan (satu orang menjalankan script, atau banyak pengguna/proses sekaligus). Nilai skala terhadapnya dan sebutkan asumsinya.
-- Telusuri alur utama ujung ke ujung: data masuk, tersimpan, keluar. Baca penuh jalur input pengguna, uang, auth, penulisan data, background job, dan state yang dibagi antarproses.
-- Repo besar: dalami bagian yang paling mahal bila salah, bukan file per file. Sebutkan bagian yang tidak dibaca.
+Review the repo like a senior developer who just inherited it and will be called when it breaks. Priorities: correct, safe, holds under load, tested, fast, lean. Every extra line must be read, tested, and fixed later. This is a report the user asked for, so write it in full.
 
-## 2. Cari
-1. **Bug:** hasil salah, crash, edge case terlewat (kosong, nol, item terakhir, pembulatan, zona waktu), pemanggil tidak sesuai dengan return fungsi, aturan sama diterapkan berbeda di dua tempat.
-2. **Risiko:** celah keamanan (injection, random lemah, secret di kode, input pengguna tanpa validasi), kehilangan data (error ditelan, urutan tulis salah, tanpa transaction).
-3. **Skala:** aman untuk satu pengguna, salah untuk banyak: race check-then-write, kerja sama diulang tiap proses, memori/list yang terus tumbuh, query per item, O(n^2) pada input besar, state per proses yang seharusnya dibagi.
-4. **Test hilang:** logika berisiko (percabangan, parser, uang, keamanan, penulisan data) tanpa test yang gagal saat logikanya rusak. Satu test bagus, bukan coverage.
-5. **Kecepatan:** perlambatan besar = masalah. Optimasi kecil (kerja berulang di hot loop) = saran.
-6. **Ramping:** kode yang tidak perlu ada atau perlu lebih kecil.
-   - hapus: dead code, opsi/flag/config tak terpakai, fitur spekulatif
-   - reuse: dua helper melakukan hal sama (pertahankan satu, sebut path-nya)
-   - stdlib/native: sudah disediakan standard library atau platform; dependency yang kerjanya cukup beberapa baris
-   - yagni: interface dengan satu implementasi, factory dengan satu produk, wrapper yang hanya meneruskan panggilan
-   - gabung: salinan mirip yang harus berubah bersama
-   - pecah: satu fungsi/class dengan beberapa tugas tak terkait. Pecah menurut tugas, bukan jumlah baris, dan jangan jadi helper yang hanya memperpendek fungsi.
+## 1. Map First
 
-## 3. Periksa sebelum melapor
-- Tiap temuan butuh kasus konkret: "input/situasi ini menghasilkan hasil salah ini". Tanpa kasus, bukan temuan.
-- Sebelum menyebut kode tak terpakai, grep seluruh tree, termasuk test, fixture, config, dan referensi string/dinamis.
-- Jalan pintas bertanda komentar `shortcut:` (atau `ponytail:` lama) yang menyebut batasnya adalah keputusan, bukan temuan, kecuali beban yang diharapkan sudah melewatinya.
-- Usulkan perbaikan terkecil yang berhasil. Utamakan yang menghapus kode. Jangan menambah layer, framework, atau config yang tidak dibutuhkan.
-- Tanpa selera gaya, tanpa "pertimbangkan", tanpa kekhawatiran samar.
+- Review what the user names (folder, package, or repo). Not named: whole repo.
+- Read README, build/deploy config, dependency list, entry points (main, routes, handlers, jobs, CLI), and tests.
+- Determine expected load (one person running a script, or many users/processes at once). Judge scale against it and state the assumption.
+- Trace the main flow end to end: data in, stored, out. Read in full the paths for user input, money, auth, data writes, background jobs, and state shared across processes.
+- Large repo: go deep on the parts costliest if wrong, not file by file. Name the parts not read.
+
+## 2. Look For
+
+1. **Bugs:** wrong results, crashes, missed edge cases (empty, zero, last item, rounding, time zones), caller not matching function return, same rule applied differently in two places.
+2. **Risks:** security holes (injection, weak randomness, secrets in code, unvalidated user input), data loss (swallowed errors, wrong write order, no transaction).
+3. **Scale:** safe for one user, wrong for many: check-then-write races, same work repeated per process, memory/lists that keep growing, per-item queries, O(n^2) on large input, per-process state that should be shared.
+4. **Missing tests:** risky logic (branches, parsers, money, security, data writes) with no test that fails when the logic breaks. One good test, not coverage.
+5. **Speed:** big slowdown = problem. Small optimization (repeated work in hot loop) = suggestion.
+6. **Lean:** code that need not exist or should be smaller.
+   - delete: dead code, unused options/flags/config, speculative features
+   - reuse: two helpers do the same thing (keep one, name its path)
+   - stdlib/native: already provided by the standard library or platform; dependency whose work fits in a few lines
+   - yagni: interface with one implementation, factory with one product, wrapper that only forwards calls
+   - merge: similar copies that must change together
+   - split: one function/class with several unrelated jobs. Split by job, not line count, and do not make helpers that only shorten the function.
+
+## 3. Verify Before Reporting
+
+- Every finding needs a concrete case: "this input/situation gives this wrong result". No case, not a finding.
+- Before calling code unused, grep the whole tree, including tests, fixtures, config, and string/dynamic references.
+- A shortcut marked with a `shortcut:` comment (or old `ponytail:`) that states its limit is a decision, not a finding, unless the expected load already exceeds it.
+- Propose the smallest fix that works. Prefer fixes that delete code. Do not add layers, frameworks, or config that are not needed.
+- No style taste, no "consider", no vague worries.
 
 ## 4. Output
-Bahasa Indonesia sederhana: kalimat pendek, kata sehari-hari. Jelaskan istilah teknis saat pertama dipakai. Pembaca mungkin belum pernah melihat kode ini.
 
-Mulai dengan `Fungsi repo ini:` (2-3 kalimat) dan beban yang diasumsikan.
+Simple English: short sentences, everyday words. Explain technical terms on first use. The reader may never have seen this code.
 
-Lalu temuan dalam tiga grup, terpenting dulu, lewati grup kosong:
-- **Wajib diperbaiki:** bug, keamanan, kehilangan data, rusak pada beban yang diharapkan.
-- **Sebaiknya diperbaiki:** kode berisiko tanpa test, lambat nyata, duplikasi, fungsi campur tugas, kode yang tidak perlu ada.
-- **Bagus bila ada:** optimasi kecil, bentuk lebih pendek.
+Start with `What this repo does:` (2-3 sentences) and the assumed load.
 
-Beri nomor berurutan lintas grup agar pengguna bisa bilang "perbaiki 2 dan 5". Maksimal 20 temuan; sebutkan jumlah yang dilewati. Tiap temuan punya empat bagian, masing-masing 1-2 kalimat pendek:
+Then findings in three groups, most important first, skip empty groups:
 
-2. **Order tercatat di hari yang salah** (`billing/close_day.py:L40-52`)
-   - **Ini apa:** Job tengah malam menutup hari dan menagih semua order hari itu.
-   - **Masalah:** "Hari ini" diambil dari jam server (UTC). Order pukul 00:30 di Berlin tertagih di hari sebelumnya.
-   - **Perbaikan:** Hitung hari sekali dalam zona waktu toko: `datetime.now(ZoneInfo("Europe/Berlin")).date()`.
-   - **Jika dilewati:** Order larut malam bertanggal salah, akuntansi memperbaikinya manual.
+- **Must fix:** bugs, security, data loss, breaks under expected load.
+- **Should fix:** risky code without tests, clearly slow, duplication, functions mixing jobs, code that need not exist.
+- **Nice to have:** small optimizations, shorter shapes.
 
-Akhiri dengan:
-- `Verdict:` satu baris: sehat, atau apa yang diperbaiki dulu.
-- `Lean: -<N> baris, -<M> dependency mungkin.` bila ada temuan ramping.
-- `Tidak diperiksa:` bagian yang tidak dibaca atau tidak bisa dijalankan.
+Number findings continuously across groups so the user can say "fix 2 and 5". Maximum 20 findings; state how many were skipped. Each finding has four parts, 1-2 short sentences each:
 
-Tidak ada temuan: `Fungsi repo ini:`, lalu `Sehat. Tidak ada yang perlu diperbaiki.` dan satu baris tentang yang diperiksa.
+2. **Order booked on the wrong day** (`billing/close_day.py:L40-52`)
+   - **What this is:** The midnight job closes the day and bills all orders of that day.
+   - **Problem:** "Today" comes from the server clock (UTC). An order at 00:30 in Berlin is billed on the previous day.
+   - **Fix:** Compute the day once in the store's time zone: `datetime.now(ZoneInfo("Europe/Berlin")).date()`.
+   - **If skipped:** Late-night orders get the wrong date, accounting fixes them by hand.
 
-Laporan satu kali, tidak mengubah kode.
+End with:
+
+- `Verdict:` one line: healthy, or what to fix first.
+- `Lean: -<N> lines, -<M> dependencies possible.` if there are lean findings.
+- `Not checked:` parts not read or not runnable.
+
+No findings: `What this repo does:`, then `Healthy. Nothing to fix.` and one line on what was checked.
+
+One-time report, does not change code.
